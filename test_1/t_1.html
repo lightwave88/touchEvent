@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>touchmove, mousemove 差異</title>
+        <style media="screen">
+            *{
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+            html, body{
+                width: 100%;
+            }
+
+            #container{
+                height: 200px;
+                border: 1px solid;
+                background-color: #FFC;
+            }
+            #box_1{
+                position: absolute;
+                top: 50px;
+                left: 50px;
+                width: 150px;
+                height: 80px;
+                background-color: #F00;
+                opacity: 0.7;
+            }
+            .msg{
+                font-size: 12px;
+                height: 30px;
+                width: 100%;
+                word-wrap:break-word;
+            }
+
+        </style>
+        <script src="./../js_lib/jquery-3.3.1.min.js" charset="utf-8"></script>
+        <script>
+            $(document).ready(function () {
+                if ("ontouchstart" in document.documentElement) {
+                    mobile();
+                } else {
+                    desktop();
+                }
+
+
+            });
+
+            function mobile() {
+                $('#container').on('touchmove', _getCallback_1('#msg_1'));
+                $('#box_1').on('touchmove', _getCallback_1('#msg_2'));
+            }
+
+            function desktop() {
+                $('#container').on('mousemove', _getCallback_2('#msg_1'));
+                $('#box_1').on('mousemove', _getCallback_2('#msg_2'));
+            }
+
+            function _getCallback_1(id) {
+                return function (e) {
+
+                    let data = {
+                        target: e.target.id,
+                        currentTarget: e.currentTarget.id,
+                        x: e.touches[0].pageX,
+                        y: e.touches[0].pageY
+                    };
+                    $(id).text(JSON.stringify(data));
+
+                };
+            }
+
+            function _getCallback_2(id) {
+                return function (e) {
+
+                    let data = {
+                        target: e.target.id,
+                        currentTarget: e.currentTarget.id,
+                        x: e.offsetX,
+                        y: e.offsetY
+                    };
+                    $(id).text(JSON.stringify(data));
+                };
+            }
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="box_1">
+
+            </div>
+        </div>
+        <p class="msg" id="msg_1">
+
+        </p>
+        <p class="msg" id="msg_2">
+
+        </p>
+    </body>
+</html>
